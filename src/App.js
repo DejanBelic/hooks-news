@@ -3,19 +3,22 @@ import axios from 'axios';
 
 function App() {
   const [results, setResults] = useState([]);
+
+  const getResults = async () => {
+    const response = await axios.get('http://hn.algolia.com/api/v1/search?query=reacthooks');
+    setResults(response.data.hits);
+  };
+
   useEffect(
-      () => {
-        axios.get('http://hn.algolia.com/api/v1/search?query=reacthooks')
-            .then(response => {
-              setResults(response.data.hits);
-            })
+       () => {
+          getResults();
       },[]);
 
   return (
     <>
       {results.map(result => (
-          <ul>
-          <li key={result.objectID}><a href={result.url}>{result.title}</a></li>
+          <ul key={result.objectID}>
+          <li ><a href={result.url}>{result.title}</a></li>
           </ul>
       ))}
     </>
